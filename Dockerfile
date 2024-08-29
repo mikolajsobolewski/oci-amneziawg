@@ -1,6 +1,9 @@
 FROM amneziavpn/amneziawg-go:0.2.12
 
 RUN addgroup -g 1000 awg && \
+  apt-get update && \
+  apt-get install -y sudo && \
+  apt-get clean && \
   adduser -u 1000 -G awg -h /home/awg -D awg && \
   echo '%wheel ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/wheel && \
   adduser awg wheel && \
