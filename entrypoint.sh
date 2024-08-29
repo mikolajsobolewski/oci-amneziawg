@@ -6,7 +6,7 @@ stop () {
 }
 trap stop SIGTERM SIGINT SIGQUIT
 
-wg-quick up /etc/amneziawg/wg0.conf
-echo "Public key '$(sudo cat /etc/amneziawg/privatekey | wg pubkey)'"
+wg-quick up /etc/wireguard/wg0.conf
+echo "Public key '$(sudo cat /etc/wireguard/privatekey | wg pubkey)'"
 sleep infinity &
 wait $!
