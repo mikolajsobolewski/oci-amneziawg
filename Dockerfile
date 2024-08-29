@@ -1,13 +1,15 @@
-FROM alpine:3.18
+FROM amneziavpn/amneziawg-go:0.2.12
 
-RUN apk add --no-cache wireguard-tools sudo
-
-RUN addgroup -g 1000 wireguard && \
-  adduser -u 1000 -G wireguard -h /home/wireguard -D wireguard && \
+RUN addgroup -g 1000 awg && \
+  adduser -u 1000 -G awg -h /home/awg -D awg && \
   echo '%wheel ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/wheel && \
-  adduser wireguard wheel
+  adduser awg wheel && \
+  install -o 1000 -g 1000 -d -m 0700 /etc/amneziawg && \
+  ln -s /usr/bin/awg /usr/bin/wg && \
+  ln -s /usr/bin/awg-quick /usr/bin/wg-quick && \
+  ln -s /etc/amneziawg /etc/wireguard
 
-USER wireguard
-WORKDIR /home/wireguard
-COPY ./Entrypoint.sh ./Entrypoint.sh
-CMD ["/bin/sh", "-c", "/home/wireguard/Entrypoint.sh"]
+USER awg
+WORKDIR /home/awg
+COPY ./entrypoint.sh ./entrypoint.sh
+CMD ["/bin/sh", "-c", "/home/awg/entrypoint.sh"]
