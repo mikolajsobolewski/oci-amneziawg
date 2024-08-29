@@ -12,13 +12,31 @@ on:
       - main
 jobs:
   build:
-    name: 'OCI'
-    uses: curium-rocks/flows/.github/workflows/oci-build-image.yml@main
+    runs-on: ubuntu-latest
     permissions:
+      id-token: write
       contents: read
       packages: write
-      security-events: write
-      id-token: write
-    with:
-      registry: ghcr.io/mikolajsobolewski
-      image_name: awg
+    steps:
+      - uses: actions/checkout@v4
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: "ghcr.io/mikolajsobolewski"
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ vars.REGISTRY }}/${{ inputs.service_name }}
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=schedule,pattern=nightly
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
