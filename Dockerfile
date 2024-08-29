@@ -6,7 +6,7 @@ RUN apk add --no-cache sudo bash && \
   echo '%wheel ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/wheel && \
   adduser awg wheel
 
-#USER awg
-#WORKDIR /home/awg
-#COPY ./entrypoint.sh ./entrypoint.sh
-#CMD ["/bin/sh", "-c", "/home/awg/entrypoint.sh"]
+USER awg
+WORKDIR /home/awg
+COPY ./entrypoint.sh ./entrypoint.sh
+CMD ["/bin/sh", "-c", "/home/awg/entrypoint.sh"]
