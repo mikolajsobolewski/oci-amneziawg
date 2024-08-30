@@ -6,14 +6,12 @@ stop () {
 }
 trap stop SIGTERM SIGINT SIGQUIT
 
-if [ ! -c /dev/net/tun ]; then
-    sudo mkdir -p /dev/net
-    ls -la /dev
-    sudo mknod /dev/net/tun c 10 200
-    ls -la /dev/net
-    sudo chmod 600 /dev/net/tun
-fi
-wg-quick up /etc/wireguard/wg0.conf
-echo "Public key '$(sudo cat /etc/wireguard/privatekey | wg pubkey)'"
+# kill daemons in case of restart
+wg-quick down /etc/wireguard/wg0.conf
+
+# start daemons if configured
+if [ -f /etc/wireguard/wg0.conf ]; then (wg-quick up /etc/wireguard/wg0.conf); fi
+
+echo "Public key '$(sudo cat /etc/wireguard/wg0.conf | sed -n 's/^PrivateKey = //p' | wg pubkey)'"
 sleep infinity &
 wait $!
