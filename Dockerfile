@@ -5,7 +5,7 @@ RUN apk add --no-cache sudo bash && \
   adduser -u 1000 -G awg -h /home/awg -D awg && \
   echo '%wheel ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/wheel && \
   adduser awg wheel && \
-  install -o awg -g awg -m 0700 /etc/amneziawg && \
+  install -o awg -g awg -m 0700 -d /etc/amneziawg && \
   ln -s /etc/amneziawg /etc/wireguard 
 
 
