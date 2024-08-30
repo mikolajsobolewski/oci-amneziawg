@@ -4,8 +4,7 @@ RUN apk add --no-cache sudo bash && \
   addgroup -g 1000 awg && \
   adduser -u 1000 -G awg -h /home/awg -D awg && \
   echo '%wheel ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/wheel && \
-  adduser awg wheel && \
-  mkdir -p /dev/net
+  adduser awg wheel
 
 
 USER awg
