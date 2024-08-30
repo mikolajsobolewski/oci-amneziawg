@@ -31,9 +31,9 @@ jobs:
         with:
           images: "ghcr.io/mikolajsobolewski/awg" 
           tags: |
-            type=schedule
             type=ref,event=branch
             type=schedule,pattern=nightly
+            type=sha,format=short,prefix=
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
