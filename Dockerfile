@@ -1,4 +1,4 @@
-FROM amneziavpn/amneziawg-go:0.2.12
+FROM amneziavpn/amneziawg-go:3.0.2
 
 RUN apk add --no-cache sudo bash && \
   addgroup -g 1000 awg && \
