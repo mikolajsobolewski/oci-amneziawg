@@ -7,6 +7,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - 'v*'
   pull_request:
     branches:
       - main
@@ -34,6 +36,9 @@ jobs:
             type=ref,event=branch
             type=schedule,pattern=nightly
             type=sha,format=short,prefix=
+            type=ref,event=tag
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
