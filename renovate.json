@@ -1,7 +1,38 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
-  "automerge": true
+  "dependencyDashboard": false,
+  "labels": [
+    "dependencies"
+  ],
+  "packageRules": [
+    {
+      "description": "Базовый образ — это и есть реализация VPN. Смену версии смотрит человек: вслепую влитый минорный бамп однажды выкатит сломанный туннель, и узнаем мы об этом от клиента, а не от CI.",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "amneziavpn/amneziawg-go"
+      ],
+      "automerge": false
+    },
+    {
+      "description": "Пины по digest и версии GitHub Actions вливаем сами, когда сборка зелёная: содержимое там не меняется, меняется только ссылка на него.",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "automerge": true,
+      "automergeType": "branch"
+    },
+    {
+      "description": "То же для обновлений digest у любых образов.",
+      "matchUpdateTypes": [
+        "digest"
+      ],
+      "automerge": true,
+      "automergeType": "branch"
+    }
+  ]
 }
