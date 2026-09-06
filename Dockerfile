@@ -1,4 +1,4 @@
-FROM amneziavpn/amneziawg-go:3.0.2
+FROM amneziavpn/amneziawg-go:3.1.20260828
 
 RUN apk add --no-cache sudo bash socat && \
   addgroup -g 1000 awg && \
