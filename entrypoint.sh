@@ -32,6 +32,17 @@ if [ -f "$HEADER_PROTECTION_KEY_FILE" ]; then
     fi
 fi
 
-echo "Public key '$(sudo cat /etc/wireguard/wg0.conf | sed -n 's/^PrivateKey = //p' | wg pubkey)'"
+# The key may live in the config or, when the config sets it in PostUp, in a separate
+# file. Reading only the config printed "Key is not the correct length or format" on a
+# perfectly healthy interface — noise that reads exactly like a broken key.
+PRIVATE_KEY="$(sed -n 's/^PrivateKey = //p' /etc/wireguard/wg0.conf 2>/dev/null)"
+if [ -z "$PRIVATE_KEY" ] && [ -s /etc/wireguard/privatekey ]; then
+    PRIVATE_KEY="$(sudo cat /etc/wireguard/privatekey)"
+fi
+if [ -n "$PRIVATE_KEY" ]; then
+    echo "Public key '$(printf '%s' "$PRIVATE_KEY" | wg pubkey)'"
+else
+    echo "Public key: no private key in /etc/wireguard/wg0.conf nor /etc/wireguard/privatekey" >&2
+fi
 sleep infinity &
 wait $!
