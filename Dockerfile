@@ -5,7 +5,12 @@ RUN apk add --no-cache sudo bash socat && \
   adduser -u 1000 -G awg -h /home/awg -D awg && \
   echo '%wheel ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/wheel && \
   adduser awg wheel && \
-  install -o awg -g awg -m 0700 -d /etc/amnezia/amneziawg && \
+  # 0755, not 0700: awg-quick re-execs itself as root through sudo, and this container
+  # drops ALL capabilities except the network ones — so root has no CAP_DAC_OVERRIDE and
+  # cannot enter a 0700 directory it does not own. The config then "does not exist" for
+  # awg-quick while the shell can read it fine. The key's protection comes from the
+  # mounted file's own mode, not from this directory.
+  install -o awg -g awg -m 0755 -d /etc/amnezia/amneziawg && \
   ln -s /etc/amnezia/amneziawg /etc/wireguard && \
   ln -s /etc/amnezia/amneziawg /etc/amneziawg && \ 
   echo -e " \n\
