@@ -5,8 +5,9 @@ RUN apk add --no-cache sudo bash socat && \
   adduser -u 1000 -G awg -h /home/awg -D awg && \
   echo '%wheel ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/wheel && \
   adduser awg wheel && \
-  install -o awg -g awg -m 0700 -d /etc/amneziawg && \
-  ln -s /etc/amneziawg /etc/wireguard && \ 
+  install -o awg -g awg -m 0700 -d /etc/amnezia/amneziawg && \
+  ln -s /etc/amnezia/amneziawg /etc/wireguard && \
+  ln -s /etc/amnezia/amneziawg /etc/amneziawg && \ 
   echo -e " \n\
   fs.file-max = 51200 \n\
   \n\
